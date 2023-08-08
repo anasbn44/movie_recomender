@@ -3,7 +3,7 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 
-def prepare_data(movies, ratings):
+def prepare_y_r(movies, ratings):
     Y = ratings.pivot(index="movieId", columns="userId", values="rating")
     Y = Y.reindex(movies["movieId"])
     Y = Y.fillna(0)
@@ -17,5 +17,4 @@ def prepare_x(movies, features):
         genres = row.genres.split('|')
         for genre in genres:
             X.at[i, genre] = 1
-    print(X.head())
     return X

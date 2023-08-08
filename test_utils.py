@@ -14,7 +14,7 @@ class Test(TestCase):
                               "Thriller", "War", "IMAX", "Western", "(no genres listed)"]
 
     def test_prepare_data(self):
-        self.assertIsNotNone(utils.prepare_data(self.movies, self.ratings), "wrong")
+        self.assertIsNotNone(utils.prepare_y_r(self.movies, self.ratings), "wrong")
 
     def test_prepare_x(self):
         self.assertIsNotNone(utils.prepare_x(self.movies, self.genre_columns), "wrong")
