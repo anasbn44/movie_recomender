@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import re
 pd.set_option('display.max_columns', None)
 
 
@@ -18,3 +19,13 @@ def prepare_x(movies, features):
         for genre in genres:
             X.at[i, genre] = 1
     return X
+
+def extract_year(movies):
+    movies["year"] = movies.loc[:, "title"].apply(lambda x : test_year_title(x))
+
+def test_year_title(x):
+    y = re.findall("[(]\d{4}[)]", x)
+    if len(y) == 0:
+        return np.nan
+    return y[0].translate({ord(c) : None for c in '()'})
+

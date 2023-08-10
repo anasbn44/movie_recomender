@@ -1,6 +1,7 @@
 from unittest import TestCase
 import pandas as pd
 import numpy as np
+
 pd.set_option('display.max_columns', None)
 
 import utils
@@ -8,10 +9,10 @@ import utils
 
 class Test(TestCase):
     def setUp(self) -> None:
-        self.ratings = pd.DataFrame(np.array([[1,1,4], [2,1,4.5], [2,2,2.5], [3,2,5]]),
-                                    columns=["userId","movieId","rating"], index=np.arange(1, 5))
-        self.movies = pd.DataFrame([[1,"Nixon (1995)","Drama"], [2,"Four Rooms (1995)","Comedy"]],
-                                   columns=["movieId","title","genres"], index=np.arange(1,3))
+        self.ratings = pd.DataFrame(np.array([[1, 1, 4], [2, 1, 4.5], [2, 2, 2.5], [3, 2, 5]]),
+                                    columns=["userId", "movieId", "rating"], index=np.arange(1, 5))
+        self.movies = pd.DataFrame([[1, "Nixon (1995)", "Drama"], [2, "Four Rooms ", "Comedy"]],
+                                   columns=["movieId", "title", "genres"], index=np.arange(1, 3))
         self.genre_columns = ["Comedy", "Drama"]
         self.Y = pd.DataFrame(np.array([[4, 4.5, 0], [0, 2.5, 5]]),
                               columns=np.arange(1, 4), index=np.arange(1, 3))
@@ -26,3 +27,7 @@ class Test(TestCase):
     def test_prepare_x(self):
         self.assertEqual(utils.prepare_x(self.movies, self.genre_columns), self.X, "wrong")
 
+    def test_extract_year(self):
+        utils.extract_year(self.movies)
+        print(self.movies.year.values)
+        self.assertTrue(np.array_equal(self.movies.year.values, ['1995', np.nan], equal_nan=True), "wrong")
