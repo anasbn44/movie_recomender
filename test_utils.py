@@ -31,3 +31,4 @@ class Test(TestCase):
         utils.extract_year(self.movies)
         print(self.movies.year.values)
         self.assertTrue(np.array_equal(self.movies.year.values, ['1995', np.nan], equal_nan=True), "wrong")
+
