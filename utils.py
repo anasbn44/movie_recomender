@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
-import tensorflow as tf
 import re
 pd.set_option('display.max_columns', None)
 
 
 def normalize_ratings(Y, R):
     Ymean = Y[Y > 0].mean(axis=1).values.reshape(-1, 1)
+    Ymean = np.nan_to_num(Ymean)
     Ynorm = Y.values - np.multiply(Ymean, R.values)
     return Ynorm, Ymean
 
