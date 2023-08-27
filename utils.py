@@ -27,11 +27,17 @@ def prepare_x(movies, features):
     return X
 
 def extract_year(movies):
-    movies["year"] = movies.loc[:, "title"].apply(lambda x : test_year_title(x))
+    movies["year"] = movies["title"].apply(test_year_title_v)
 
 def test_year_title(x):
     y = re.findall("[(]\d{4}[)]", x)
     if len(y) == 0:
         return np.nan
     return y[0].translate({ord(c) : None for c in '()'})
+
+def test_year_title_v(x):
+    match = re.search(r"\((\d{4})\)", x)
+    if match:
+        return match.group(1)
+    return np.nan
 
