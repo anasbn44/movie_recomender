@@ -21,7 +21,7 @@ def load_data():
 
     y_train = df_ratings['rating']
 
-    return movies_train, user_train, y_train, df_movies
+    return movies_train, user_train, y_train, df_movies, content_movies
 
 
 def prepare_content_movies(movies, ratings):
