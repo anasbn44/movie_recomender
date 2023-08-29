@@ -21,7 +21,7 @@ def load_data():
 
     y_train = df_ratings['rating']
 
-    return movies_train, user_train, y_train, df_movies, content_movies
+    return movies_train, user_train, y_train, df_movies, df_ratings, content_movies, content_user
 
 
 def prepare_content_movies(movies, ratings):
@@ -61,6 +61,34 @@ def prepare_content_users(prepared_movies, ratings):
     user_vecs = user_vecs.drop(columns=['movieId', 'rating', 'timestamp']).groupby(['userId']).mean()
     user_vecs.fillna(0, inplace=True)
     return df.merge(user_vecs, how='left', on='userId')
+
+
+def get_user_vecs(uid, df_user, size_movies):
+    exi_user = df_user.loc[df_user['userId'] == uid, :]
+    if exi_user.shape[0] == 0:
+        print("unknown user id")
+        return None
+    exi_user_vecs = np.tile(exi_user.head(1).values, (size_movies, 1))
+    return exi_user_vecs
+
+
+def print_prediction_existing_user(uid, y_p, df_ratings, df_movies):
+    df_ou = df_ratings.loc[df_ratings['userId'] == uid, :]
+
+    da = df_ou.drop(columns=['userId', 'timestamp']).merge(df_movies, on='movieId')
+    df_m = df_movies.copy()
+    df_m.insert(1, 'predicted_ratings', y_p)
+    df_m = df_m.drop(columns=['title', 'genres', 'year']).merge(da, on='movieId')
+    return df_m
+
+
+def print_prediction_new_user(y_nu, df_movies, movie_vecs, max_size = 10):
+    df = df_movies.copy()
+    df.insert(2, 'predicted_user_rating', y_nu)
+    df.insert(3, 'mean_rating', movie_vecs['rating'])
+    df.sort_values(by='predicted_user_rating', ascending=False, inplace=True)
+    result = df.iloc[:max_size, :]
+    return result
 
 
 def test_year_title(x):
